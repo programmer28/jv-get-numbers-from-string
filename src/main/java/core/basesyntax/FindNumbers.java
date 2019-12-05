@@ -2,6 +2,8 @@ package core.basesyntax;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FindNumbers {
 
@@ -17,30 +19,12 @@ public class FindNumbers {
      */
     public int[] getAllNumbers(String text) {
         List<Integer> list = new ArrayList<>();
-        char[] array = text.toCharArray();
-        String number = "";
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == '-' && i + 1 < array.length
-                    && Character.isDigit(array[i + 1]) && number.equals("")) {
-                number += array[i];
-            }
-            if (!Character.isDigit(array[i]) && !number.equals("") && !number.equals("-")) {
-                list.add(Integer.parseInt(number) * 2);
-                if (array[i] == '-') {
-                    number = "-";
-                } else {
-                    number = "";
-                }
-            }
-            if (Character.isDigit(array[i])) {
-                number += array[i];
-                if (i == array.length - 1) {
-                    list.add(Integer.parseInt(number) * 2);
-                }
-            }
+        Pattern p = Pattern.compile("-?[0-9]+");
+        Matcher m = p.matcher(text);
+        while (m.find()) {
+            list.add(Integer.parseInt(m.group()) * 2);
         }
-        int k = list.size();
-        int[] resArray = new int[k];
+        int[] resArray = new int[list.size()];
         for (int i = 0; i < resArray.length; i++) {
             resArray[i] = list.get(i);
         }
